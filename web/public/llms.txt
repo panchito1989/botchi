@@ -1,0 +1,33 @@
+# Botchi
+
+> Botchi es un mentor educativo con Inteligencia Artificial para niños y jóvenes (6 a 25+ años): un dispositivo físico tipo mascota que enseña con el método socrático/mayéutico —nunca da la respuesta directa, guía con analogías y contrapreguntas para que el niño la descubra— acompañado de una plataforma web para que los padres personalicen el dispositivo y vean el progreso. Hecho en México por Christian Fiesco. Idioma principal: español.
+
+## Qué es
+
+- Dispositivo mentor con IA + plataforma web para padres.
+- Pedagogía: método socrático (mayéutica). No es una enciclopedia: hace pensar.
+- Niveles por edad: Semilla (6–9), Constructor (10–14), Arquitecto (15–18), Executive (19+), y ediciones premium.
+- Enfocado a idiomas, lógica, matemáticas, programación y ciencia, partiendo de los intereses del niño.
+- Privacidad: sin publicidad, sin redes sociales, sin rastreo de terceros; control parental.
+
+## Páginas
+
+- [Inicio](https://botchi-one.vercel.app/): qué es Botchi, cómo funciona, plan por edad.
+- [Prueba a Botchi](https://botchi-one.vercel.app/prueba): demo de voz interactivo con la IA mayéutica real.
+- [Precios y Edición Fundadores](https://botchi-one.vercel.app/precios): oferta de lanzamiento — dispositivo a precio de costo ($1,500 MXN) y membresía gratis de por vida para las primeras 50 familias; reserva sin pago.
+- [El método (mayéutica)](https://botchi-one.vercel.app/metodo): cómo enseña Botchi con el método socrático, con ejemplos de diálogo.
+- [Comparativa](https://botchi-one.vercel.app/comparativa): Botchi vs. tablets, apps educativas y ChatGPT directo.
+- [Seguridad y datos](https://botchi-one.vercel.app/seguridad-datos): qué datos se recopilan, control parental y blindaje de la IA para niños.
+- [Sobre Botchi](https://botchi-one.vercel.app/sobre): quién es Christian Fiesco y por qué existe Botchi.
+- [Preguntas frecuentes](https://botchi-one.vercel.app/preguntas): respuestas directas (qué es, edades, seguridad, diferencia con ChatGPT).
+- [Apoyar el proyecto](https://botchi-one.vercel.app/apoyar): cómo apoyar el desarrollo.
+
+## Legal
+
+- [Aviso de Privacidad](https://botchi-one.vercel.app/privacidad)
+- [Política de Cookies](https://botchi-one.vercel.app/cookies)
+- [Términos y Condiciones](https://botchi-one.vercel.app/terminos)
+
+## Contacto
+
+- WhatsApp directo con el creador: +52 56 1066 9353

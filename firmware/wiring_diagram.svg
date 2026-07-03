@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1200" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1440" height="1200" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="48" y="56" font-size="34" font-weight="800" fill="#1f2a44">Botchi — Diagrama de cableado</text>
+  <text x="48" y="86" font-size="18" fill="#5b6472">Raspberry Pi Zero W/2 W · Waveshare 1.28" LCD · INMP441 · MAX98357A · LX-LCBST + LiPo</text>
+
+  <!-- Warnings -->
+  <rect x="48" y="108" width="1344" height="92" rx="14" fill="#fdecea" stroke="#e07a72" stroke-width="2"/>
+  <text x="68" y="138" font-size="18" font-weight="700" fill="#b3261e">⚠ Reglas para no quemar nada</text>
+  <text x="68" y="166" font-size="15.5" fill="#7a1f17">1) Nunca 5V a un pin de 3.3V (mic y pantalla = 3.3V).   2) La Pi se alimenta de UNA sola fuente: LX-LCBST o el USB de la Pi, no ambas.</text>
+  <text x="68" y="188" font-size="15.5" fill="#7a1f17">3) LCD_BL va a 3.3V (NO a GPIO18, ese es el reloj del audio).   4) La Pi necesita el header de 40 pines soldado.</text>
+
+  <!-- ===================== RAILS / PROTOBOARD ===================== -->
+  <text x="48" y="248" font-size="22" font-weight="800" fill="#1f2a44">1 · Rieles en la mini protoboard</text>
+  <text x="48" y="274" font-size="14.5" fill="#5b6472">Crea 3 buses. De ellos repartes a varios módulos (hay más cables que pines iguales en la Pi).</text>
+
+  <!-- 5V rail -->
+  <rect x="48" y="292" width="640" height="48" rx="10" fill="#fdecea" stroke="#e53935" stroke-width="2"/>
+  <circle cx="78" cy="316" r="5" fill="#e53935"/><circle cx="104" cy="316" r="5" fill="#e53935"/><circle cx="130" cy="316" r="5" fill="#e53935"/>
+  <text x="156" y="322" font-size="17" font-weight="700" fill="#b3261e">RIEL 5V</text>
+  <text x="270" y="322" font-size="14.5" fill="#7a1f17">← LX-LCBST VO+   |   → Pi pin 2 (alimenta la Pi)   |   → MAX98357A Vin</text>
+
+  <!-- 3V3 rail -->
+  <rect x="48" y="352" width="640" height="48" rx="10" fill="#fff4e0" stroke="#e0a233" stroke-width="2"/>
+  <circle cx="78" cy="376" r="5" fill="#e0a233"/><circle cx="104" cy="376" r="5" fill="#e0a233"/><circle cx="130" cy="376" r="5" fill="#e0a233"/>
+  <text x="156" y="382" font-size="17" font-weight="700" fill="#a5701a">RIEL 3.3V</text>
+  <text x="270" y="382" font-size="14.5" fill="#7a541a">← Pi pin 1 (3V3)   |   → LCD VCC + LCD_BL   |   → INMP441 VDD</text>
+
+  <!-- GND rail -->
+  <rect x="48" y="412" width="640" height="48" rx="10" fill="#eceff1" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="78" cy="436" r="5" fill="#5b6472"/><circle cx="104" cy="436" r="5" fill="#5b6472"/><circle cx="130" cy="436" r="5" fill="#5b6472"/>
+  <text x="156" y="442" font-size="17" font-weight="700" fill="#37404a">RIEL GND</text>
+  <text x="270" y="442" font-size="14.5" fill="#37404a">← LX-LCBST VO−   |   → Pi pin 6   |   → LCD/mic/amp GND + mic L/R</text>
+
+  <!-- Power flow -->
+  <text x="48" y="506" font-size="22" font-weight="800" fill="#1f2a44">2 · Energía (LX-LCBST)</text>
+  <rect x="48" y="524" width="640" height="150" rx="14" fill="#f8f8f5" stroke="#e9e7e1" stroke-width="2"/>
+  <text x="70" y="556" font-size="15.5" fill="#1f2a44"><tspan font-weight="700">LiPo (+)</tspan>  →  <tspan font-weight="700">B+</tspan>            <tspan font-weight="700">LiPo (−)</tspan>  →  <tspan font-weight="700">B−</tspan></text>
+  <text x="70" y="586" font-size="15.5" fill="#1f2a44"><tspan font-weight="700">VO+</tspan>  →  RIEL 5V   →  Pi <tspan font-weight="700">pin 2</tspan> (5V)  +  MAX98357A Vin</text>
+  <text x="70" y="616" font-size="15.5" fill="#1f2a44"><tspan font-weight="700">VO−</tspan>  →  RIEL GND  →  Pi <tspan font-weight="700">pin 6</tspan> (GND)</text>
+  <text x="70" y="646" font-size="15.5" fill="#1f2a44"><tspan font-weight="700">USB-C</tspan>  =  carga la batería        <tspan fill="#5b6472">IN+ / IN−  =  NO se usan</tspan></text>
+
+  <!-- ===================== RASPBERRY PI ===================== -->
+  <text x="730" y="248" font-size="22" font-weight="800" fill="#1f2a44">3 · Pines usados de la Raspberry Pi</text>
+  <rect x="730" y="266" width="662" height="408" rx="14" fill="#0c7c5f" />
+  <text x="746" y="296" font-size="15" font-weight="700" fill="#d6f3ee">PIN  ·  GPIO/FUNCIÓN  →  DESTINO</text>
+
+  <!-- helper rows -->
+  <g font-size="15" fill="#ffffff">
+    <rect x="746" y="308" width="630" height="26" rx="6" fill="#0e9b76"/>
+    <circle cx="762" cy="321" r="6" fill="#e53935"/><text x="778" y="326">pin 1 · 3V3  →  RIEL 3.3V</text>
+    <circle cx="1090" cy="321" r="6" fill="#e53935"/><text x="1106" y="326">pin 2 · 5V  ←  RIEL 5V (alimenta Pi)</text>
+
+    <rect x="746" y="338" width="630" height="26" rx="6" fill="#0c8a68"/>
+    <circle cx="762" cy="351" r="6" fill="#e53935"/><text x="778" y="356">pin 4 · 5V  →  MAX98357A Vin</text>
+    <circle cx="1090" cy="351" r="6" fill="#5b6472"/><text x="1106" y="356">pin 6 · GND  →  RIEL GND</text>
+
+    <rect x="746" y="368" width="630" height="26" rx="6" fill="#0e9b76"/>
+    <circle cx="762" cy="381" r="6" fill="#1e88e5"/><text x="778" y="386">pin 12 · GPIO18  →  mic SCK + amp BCLK</text>
+    <circle cx="1090" cy="381" r="6" fill="#1e88e5"/><text x="1106" y="386">pin 35 · GPIO19  →  mic WS + amp LRC</text>
+
+    <rect x="746" y="398" width="630" height="26" rx="6" fill="#0c8a68"/>
+    <circle cx="762" cy="411" r="6" fill="#2e9e54"/><text x="778" y="416">pin 38 · GPIO20  →  mic SD (voz ENTRA)</text>
+    <circle cx="1090" cy="411" r="6" fill="#2e9e54"/><text x="1106" y="416">pin 40 · GPIO21  →  amp DIN (voz SALE)</text>
+
+    <rect x="746" y="428" width="630" height="26" rx="6" fill="#0e9b76"/>
+    <circle cx="762" cy="441" r="6" fill="#8b5cf6"/><text x="778" y="446">pin 19 · GPIO10  →  LCD MOSI</text>
+    <circle cx="1090" cy="441" r="6" fill="#8b5cf6"/><text x="1106" y="446">pin 23 · GPIO11  →  LCD SCLK</text>
+
+    <rect x="746" y="458" width="630" height="26" rx="6" fill="#0c8a68"/>
+    <circle cx="762" cy="471" r="6" fill="#8b5cf6"/><text x="778" y="476">pin 24 · GPIO8 (CE0)  →  LCD_CS</text>
+    <circle cx="1090" cy="471" r="6" fill="#14b8a6"/><text x="1106" y="476">pin 18 · GPIO24  →  LCD_DC</text>
+
+    <rect x="746" y="488" width="630" height="26" rx="6" fill="#0e9b76"/>
+    <circle cx="762" cy="501" r="6" fill="#14b8a6"/><text x="778" y="506">pin 22 · GPIO25  →  LCD_RST</text>
+    <circle cx="1090" cy="501" r="6" fill="#5b6472"/><text x="1106" y="506">pin 9/14/20 · GND  →  RIEL GND</text>
+  </g>
+  <text x="746" y="552" font-size="14.5" fill="#d6f3ee">Bus I2S full-duplex: GPIO18 y GPIO19 (reloj y word-select) van a la vez</text>
+  <text x="746" y="574" font-size="14.5" fill="#d6f3ee">al mic Y al amplificador. La voz entra por GPIO20 y sale por GPIO21.</text>
+  <text x="746" y="610" font-size="14.5" fill="#a7e8d8">LCD_BL → RIEL 3.3V (luz fija).  MISO y TP_* de la pantalla: sin conectar.</text>
+  <text x="746" y="632" font-size="14.5" fill="#a7e8d8">amp GAIN y SD: sin conectar.  mic L/R → RIEL GND (canal izquierdo).</text>
+  <text x="746" y="654" font-size="14.5" fill="#a7e8d8">amp salida + / − → directo a la bocina de 3W.</text>
+
+  <!-- ===================== MODULE CARDS ===================== -->
+  <text x="48" y="730" font-size="22" font-weight="800" fill="#1f2a44">4 · Resumen por módulo</text>
+
+  <!-- LCD -->
+  <rect x="48" y="752" width="330" height="404" rx="14" fill="#ffffff" stroke="#e9e7e1" stroke-width="2"/>
+  <rect x="48" y="752" width="330" height="40" rx="14" fill="#e8f0fe"/>
+  <text x="68" y="779" font-size="17" font-weight="800" fill="#1f2a44">Pantalla Waveshare 1.28"</text>
+  <g font-size="14.5" fill="#1f2a44">
+    <text x="68" y="822">VCC      →  RIEL 3.3V</text>
+    <text x="68" y="850">GND      →  RIEL GND</text>
+    <text x="68" y="878">MOSI     →  Pi pin 19</text>
+    <text x="68" y="906">SCLK     →  Pi pin 23</text>
+    <text x="68" y="934">LCD_CS   →  Pi pin 24</text>
+    <text x="68" y="962">LCD_DC   →  Pi pin 18</text>
+    <text x="68" y="990">LCD_RST  →  Pi pin 22</text>
+    <text x="68" y="1018">LCD_BL   →  RIEL 3.3V</text>
+    <text x="68" y="1046" fill="#5b6472">MISO     →  sin conectar</text>
+    <text x="68" y="1074" fill="#5b6472">TP_SDA/SCL/INT/RST → no usar</text>
+    <text x="68" y="1108" fill="#5b6472">(táctil = fase futura)</text>
+  </g>
+
+  <!-- INMP441 -->
+  <rect x="396" y="752" width="300" height="404" rx="14" fill="#ffffff" stroke="#e9e7e1" stroke-width="2"/>
+  <rect x="396" y="752" width="300" height="40" rx="14" fill="#e6f4ea"/>
+  <text x="416" y="779" font-size="17" font-weight="800" fill="#1f2a44">Micrófono INMP441</text>
+  <g font-size="14.5" fill="#1f2a44">
+    <text x="416" y="822">VDD  →  RIEL 3.3V</text>
+    <text x="416" y="850">GND  →  RIEL GND</text>
+    <text x="416" y="878">SCK  →  Pi pin 12</text>
+    <text x="416" y="906">WS   →  Pi pin 35</text>
+    <text x="416" y="934">SD   →  Pi pin 38</text>
+    <text x="416" y="962">L/R  →  RIEL GND</text>
+    <text x="416" y="1004" fill="#5b6472">(L/R a GND = canal</text>
+    <text x="416" y="1026" fill="#5b6472">izquierdo, correcto)</text>
+  </g>
+
+  <!-- MAX98357A -->
+  <rect x="714" y="752" width="320" height="404" rx="14" fill="#ffffff" stroke="#e9e7e1" stroke-width="2"/>
+  <rect x="714" y="752" width="320" height="40" rx="14" fill="#f3e8fd"/>
+  <text x="734" y="779" font-size="17" font-weight="800" fill="#1f2a44">Amplificador MAX98357A</text>
+  <g font-size="14.5" fill="#1f2a44">
+    <text x="734" y="822">Vin   →  Pi pin 4 (5V)</text>
+    <text x="734" y="850">GND   →  RIEL GND</text>
+    <text x="734" y="878">BCLK  →  Pi pin 12</text>
+    <text x="734" y="906">LRC   →  Pi pin 35</text>
+    <text x="734" y="934">DIN   →  Pi pin 40</text>
+    <text x="734" y="962" fill="#5b6472">GAIN  →  sin conectar</text>
+    <text x="734" y="990" fill="#5b6472">SD    →  sin conectar</text>
+    <text x="734" y="1022" font-weight="700">+ / −  →  BOCINA 3W</text>
+  </g>
+
+  <!-- LX-LCBST -->
+  <rect x="1052" y="752" width="340" height="404" rx="14" fill="#ffffff" stroke="#e9e7e1" stroke-width="2"/>
+  <rect x="1052" y="752" width="340" height="40" rx="14" fill="#fdecea"/>
+  <text x="1072" y="779" font-size="17" font-weight="800" fill="#1f2a44">Energía LX-LCBST</text>
+  <g font-size="14.5" fill="#1f2a44">
+    <text x="1072" y="822">B+    →  LiPo +  (rojo)</text>
+    <text x="1072" y="850">B−    →  LiPo −  (negro)</text>
+    <text x="1072" y="878">VO+   →  RIEL 5V</text>
+    <text x="1072" y="906">VO−   →  RIEL GND</text>
+    <text x="1072" y="934">USB-C →  cargador</text>
+    <text x="1072" y="962" fill="#5b6472">IN+ / IN−  →  no usar</text>
+    <text x="1072" y="1004" fill="#5b6472">El RIEL 5V alimenta la</text>
+    <text x="1072" y="1026" fill="#5b6472">Pi por su pin 2 (5V).</text>
+  </g>
+
+  <!-- Legend -->
+  <text x="48" y="1188" font-size="13.5" fill="#5b6472">
+    <tspan fill="#e53935">●</tspan> 5V    <tspan fill="#e0a233">●</tspan> 3.3V    <tspan fill="#5b6472">●</tspan> GND    <tspan fill="#1e88e5">●</tspan> I2S reloj    <tspan fill="#2e9e54">●</tspan> I2S datos    <tspan fill="#8b5cf6">●</tspan> SPI    <tspan fill="#14b8a6">●</tspan> control LCD
+  </text>
+</svg>

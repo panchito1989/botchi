@@ -1,0 +1,21 @@
+[Unit]
+Description=Botchi voice loop (autonomous, wake word)
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=botchi
+Group=botchi
+WorkingDirectory=/home/botchi/botchi
+Environment=HOME=/home/botchi
+EnvironmentFile=/home/botchi/botchi/botchi.env
+ExecStart=/usr/bin/python3 /home/botchi/botchi/botchi.py
+Restart=on-failure
+RestartSec=5
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

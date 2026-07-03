@@ -1,0 +1,3 @@
+# Pure-Python only — nothing that needs a compiler on ARMv6 (Pi Zero W).
+# requests / numpy / spidev / pillow come from apt (system-site-packages).
+gTTS==2.5.3

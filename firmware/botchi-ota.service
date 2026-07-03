@@ -1,0 +1,15 @@
+[Unit]
+Description=Botchi OTA client (sincroniza identidad/modulos desde el dashboard)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=botchi
+WorkingDirectory=/home/botchi/botchi
+ExecStart=/usr/bin/python3 /home/botchi/botchi/botchi_ota.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
