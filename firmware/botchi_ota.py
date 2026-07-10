@@ -9,7 +9,7 @@ Qué hace, en bucle:
      la nueva config localmente y lo anuncia ("evolucioné").
 
 No necesita hardware: es solo red. Funciona contra el sitio real
-(https://botchi-one.vercel.app). Pesa casi nada (requests + stdlib).
+(https://botchi-beta.vercel.app). Pesa casi nada (requests + stdlib).
 
 Credencial: el `device_token` (secreto). Se lee de la variable de
 entorno BOTCHI_DEVICE_TOKEN o de ~/botchi/device.json.
@@ -27,7 +27,9 @@ from pathlib import Path
 import requests
 
 FIRMWARE_VERSION = "0.1.0-ota"
-DEFAULT_API_BASE = "https://botchi-one.vercel.app"
+# botchi-one.vercel.app era la cuenta vieja de Vercel: quedó deshabilitada
+# (402) en la migración. Override con BOTCHI_API_BASE si hace falta.
+DEFAULT_API_BASE = "https://botchi-beta.vercel.app"
 HOME = Path.home() / "botchi"
 DEVICE_FILE = HOME / "device.json"
 STATE_FILE = HOME / "botchi_config.json"

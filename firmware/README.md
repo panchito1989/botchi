@@ -343,7 +343,7 @@ Debe mostrar un círculo de color y texto. Si falla, revisa SPI
 ## Paso 7 — Conectar al dashboard del padre (OTA)
 
 Esto **no necesita hardware** — es solo red. La Pi se conecta a
-`https://botchi-one.vercel.app`, se reporta "en línea" y recibe los
+`https://botchi-beta.vercel.app`, se reporta "en línea" y recibe los
 cambios que el padre hace en la web (nombre, módulos…) sin cables.
 
 1. Guarda el **device_token** de esta Pi (es su credencial secreta). En
@@ -359,7 +359,7 @@ cambios que el padre hace en la web (nombre, módulos…) sin cables.
    ```
    Verás algo como:
    `✓ en línea · vinculado: NO · config v2 · 'Botchi' · módulos: core_conversation`
-3. **Vincula la Pi a tu cuenta:** entra a `https://botchi-one.vercel.app`,
+3. **Vincula la Pi a tu cuenta:** entra a `https://botchi-beta.vercel.app`,
    inicia sesión y usa el **código de vinculación** de esta Pi. Vuelve a
    correr `--once`: ahora dirá `vinculado: SÍ`.
 4. Déjalo corriendo en bucle (sondea cada 60 s):
@@ -419,7 +419,7 @@ Desde ahora, cada vez que enciendas la Pi, el OTA arranca solo y mantiene
 | Gemini `429 limit: 0` | Ese modelo no tiene free tier en tu cuenta/región. Usa `gemini-2.5-flash` (no `gemini-2.0-flash`). |
 | `botchi.local` no resuelve | Usa la IP del router o instala Bonjour (Windows). |
 | OTA: `Token inválido` | El `device_token` no coincide. Revisa `~/botchi/device.json`. |
-| OTA: siempre `vinculado: NO` | Falta vincular el código en `botchi-one.vercel.app` con tu sesión iniciada. |
+| OTA: siempre `vinculado: NO` | Falta vincular el código en `botchi-beta.vercel.app` con tu sesión iniciada. |
 | OTA: `sin red` | La Pi sin internet (Wi-Fi 2.4 GHz) o el sitio caído. |
 
 ## Paso 9 — Botón físico + carita (opcional, ya en código)
