@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
 import { createApiClient } from "@/lib/supabase/api";
+import {
+  DAY_SECONDS,
+  clientIp,
+  envInt,
+  forbiddenOrigin,
+  isOwnOrigin,
+  tooManyRequests,
+  underLimit,
+} from "@/lib/rate-limit";
 
 // Resilience fallback if the DB prompt can't be read.
 const FALLBACK_PROMPT = `
@@ -145,7 +154,29 @@ async function callGemini(
   }
 }
 
+// Cada mensaje cuesta una llamada a Gemini. El tope global es el freno
+// de mano: aunque alguien rote IPs, el gasto del día tiene techo.
+function demoRules(ip: string) {
+  return [
+    { bucket: "demo:burst", subject: ip, limit: 20, windowSeconds: 60 },
+    {
+      bucket: "demo:daily",
+      subject: ip,
+      limit: envInt("DEMO_DAILY_PER_IP", 200),
+      windowSeconds: DAY_SECONDS,
+    },
+    {
+      bucket: "demo:global",
+      subject: "all",
+      limit: envInt("DEMO_DAILY_GLOBAL", 3000),
+      windowSeconds: DAY_SECONDS,
+    },
+  ];
+}
+
 export async function POST(req: Request) {
+  if (!isOwnOrigin(req)) return forbiddenOrigin();
+
   const body = await req.json().catch(() => ({}));
   const message = String(body?.message ?? "").slice(0, 500).trim();
   const history: Turn[] = Array.isArray(body?.history)
@@ -158,6 +189,15 @@ export async function POST(req: Request) {
 
   if (!message) {
     return NextResponse.json({ error: "EMPTY" }, { status: 400 });
+  }
+
+  if (!(await underLimit(demoRules(clientIp(req))))) {
+    // El front pinta `reply`: mejor una frase en personaje que un error.
+    return tooManyRequests(60, {
+      reply:
+        "¡Uf, hoy platiqué muchísimo y necesito descansar tantito! Vuelve a buscarme en un ratito, ¿va? 😊",
+      mode: "retry",
+    });
   }
 
   const key = process.env.GEMINI_API_KEY;

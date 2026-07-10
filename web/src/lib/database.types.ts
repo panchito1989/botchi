@@ -584,6 +584,15 @@ export type Database = {
         Returns: undefined
       }
       owns_device: { Args: { d: string }; Returns: boolean }
+      rate_limit_hit: {
+        Args: {
+          p_bucket: string
+          p_max: number
+          p_subject: string
+          p_window_seconds: number
+        }
+        Returns: boolean
+      }
       seed_demo_progress: { Args: { p_device_id: string }; Returns: undefined }
     }
     Enums: {
