@@ -138,16 +138,23 @@ async function dbAllows(rule: Rule): Promise<boolean> {
 /**
  * Cuenta un golpe contra cada regla y dice si la petición pasa.
  * Basta que una regla se pase de límite para negar.
+ *
+ * La capa de memoria corre primero y corta en seco: si ya se pasó, no
+ * pagamos ningún viaje a la DB. Las reglas que sí llegan a Postgres van
+ * en paralelo — son independientes, y en serie costaban ~250 ms cada una
+ * (0.8 s por mensaje del niño, medido en producción).
+ *
+ * Consecuencia del paralelo: una petición negada por una regla igual
+ * suma un golpe en las otras. Eso hace el tope global algo conservador,
+ * nunca laxo, así que se prefiere a pagar la latencia.
  */
 export async function underLimit(rules: Rule[]): Promise<boolean> {
   const now = Date.now();
   for (const rule of rules) {
     if (!memoryAllows(rule, now)) return false;
   }
-  for (const rule of rules) {
-    if (!(await dbAllows(rule))) return false;
-  }
-  return true;
+  const results = await Promise.all(rules.map(dbAllows));
+  return results.every(Boolean);
 }
 
 // --- Respuestas -------------------------------------------------------
