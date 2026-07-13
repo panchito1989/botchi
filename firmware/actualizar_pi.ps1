@@ -86,6 +86,12 @@ if (-not $PiHost) {
 Write-Host "Pi: $PiHost" -ForegroundColor Green
 
 # --- Copiar y verificar --------------------------------------------------
+# Voces Piper opcionales: si estan junto al script, viajan tambien
+# (el selector de voz del panel las necesita en ~/botchi de la Pi).
+foreach ($voz in @("sharvard.onnx", "sharvard.onnx.json", "claude.onnx", "claude.onnx.json")) {
+    if (Test-Path (Join-Path $aqui $voz)) { $archivos += $voz }
+}
+
 Write-Host "`n[1/2] Copiando firmware (te pedira la contraseña de la Pi)..." -ForegroundColor Cyan
 $rutas = $archivos | ForEach-Object { Join-Path $aqui $_ }
 scp $rutas "${User}@${PiHost}:~/botchi/"
