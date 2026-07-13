@@ -27,6 +27,41 @@ import requests
 # ---------------------------------------------------------------------------
 # Configuración (override por variables de entorno)
 # ---------------------------------------------------------------------------
+
+def _cargar_env_file(ruta=None):
+    """Vuelca ~/botchi/botchi.env al entorno SIN pisar lo ya definido.
+
+    Así la llave y los demás ajustes funcionan sin importar cómo se lance
+    Botchi: `ssh` de una sola línea (que no lee ~/.bashrc), el servicio
+    systemd, o una sesión interactiva. Lo que ya venga en el entorno gana
+    (override manual y del systemd). Un archivo ausente o ilegible no
+    aporta nada y nunca rompe el arranque.
+
+    Formato: líneas `CLAVE=valor`, comentarios con `#`, comillas y un
+    prefijo `export ` opcionales.
+    """
+    ruta = ruta or (Path.home() / "botchi" / "botchi.env")
+    try:
+        contenido = Path(ruta).read_text(encoding="utf-8")
+    except (OSError, ValueError):
+        return
+    for linea in contenido.splitlines():
+        linea = linea.strip()
+        if not linea or linea.startswith("#") or "=" not in linea:
+            continue
+        clave, _, valor = linea.partition("=")
+        clave = clave.strip()
+        if clave.startswith("export "):
+            clave = clave[len("export "):].strip()
+        valor = valor.strip()
+        if len(valor) >= 2 and valor[0] == valor[-1] and valor[0] in "\"'":
+            valor = valor[1:-1]
+        if clave and clave not in os.environ:
+            os.environ[clave] = valor
+
+
+_cargar_env_file()
+
 API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 MODEL = os.environ.get("BOTCHI_MODEL", "gemini-2.5-flash")
 REC_SECONDS = int(os.environ.get("BOTCHI_REC_SECONDS", "5"))
