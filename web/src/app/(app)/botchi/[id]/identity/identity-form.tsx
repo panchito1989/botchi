@@ -56,11 +56,11 @@ const PALETTES = [
   ["ocean", "Océano"],
   ["candy", "Dulce"],
 ];
+// Voces Piper reales instaladas en el dispositivo (firmware/botchi.py
+// VOCES_PIPER). El cambio llega por OTA y se oye en el siguiente turno.
 const VOICES = [
-  ["default", "Estándar"],
-  ["soft", "Suave"],
-  ["bright", "Brillante"],
-  ["deep", "Grave"],
+  ["default", "Mexicana — acento mexicano, la original"],
+  ["espanola", "Española — más natural y rápida"],
 ];
 const LANGUAGES = [
   ["es", "Español"],

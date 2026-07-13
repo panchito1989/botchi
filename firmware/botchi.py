@@ -40,6 +40,38 @@ PIPER_BIN = os.environ.get(
 PIPER_VOICE = os.environ.get(
     "BOTCHI_PIPER_VOICE", str(Path.home() / "botchi" / "voz.onnx"))
 
+# Voces Piper instaladas en ~/botchi. El padre elige desde el panel
+# (identity.voice, llega por OTA). Cada valor lista candidatos en orden;
+# se usa el primero cuyo .onnx + .onnx.json existan. Si ninguno está,
+# se queda la voz por defecto (voz.onnx) — nunca se rompe el habla.
+VOCES_PIPER = {
+    "default": ["claude.onnx", "voz.onnx"],
+    "mexicana": ["claude.onnx", "voz.onnx"],
+    "espanola": ["sharvard.onnx"],
+}
+_voz_activa = {"path": PIPER_VOICE}
+
+
+def aplicar_voz(ident):
+    """Resuelve identity.voice (panel→OTA) al .onnx local.
+
+    Se llama en cada turno: un cambio de voz en el panel se oye en la
+    siguiente respuesta, sin reiniciar. BOTCHI_PIPER_VOICE (env) gana
+    siempre: es el escape de desarrollo.
+    """
+    if os.environ.get("BOTCHI_PIPER_VOICE"):
+        return
+    base = Path.home() / "botchi"
+    nombre = str(ident.get("voice") or "default").strip().lower()
+    for archivo in VOCES_PIPER.get(nombre, []):
+        ruta = base / archivo
+        if ruta.exists() and Path(str(ruta) + ".json").exists():
+            if str(ruta) != _voz_activa["path"]:
+                print(f"🎤 Voz activa: {nombre} ({archivo})")
+            _voz_activa["path"] = str(ruta)
+            return
+    _voz_activa["path"] = PIPER_VOICE
+
 # Wake word (modo autónomo). Si está activo y Vosk + modelo disponibles,
 # Botchi escucha continuamente, se activa al oír WAKE_WORD y captura la
 # instrucción del niño. Si no, cae al modo manual (ENTER) de hoy.
@@ -151,12 +183,13 @@ def cargar_identidad():
         "language": "es",
         "age_level": "semilla",
         "personality": "curious",
+        "voice": "default",
         "personalization": {},
     }
     try:
         cfg = json.loads(CONFIG_FILE.read_text())
         i = cfg.get("identity", {})
-        for k in ("name", "language", "age_level", "personality"):
+        for k in ("name", "language", "age_level", "personality", "voice"):
             if i.get(k):
                 ident[k] = i[k]
         if isinstance(i.get("personalization"), dict):
@@ -543,12 +576,13 @@ def preguntar_a_gemini_texto(texto, ident, ota, history):
 
 def sintetizar_piper(texto, wav_path):
     """Genera voz natural y local con Piper. Devuelve True si funcionó."""
-    if not (os.path.exists(PIPER_BIN) and os.path.exists(PIPER_VOICE)):
+    voz = _voz_activa["path"]
+    if not (os.path.exists(PIPER_BIN) and os.path.exists(voz)):
         return False
     linea = " ".join(texto.split())  # una sola línea → un solo wav
     try:
         p = subprocess.run(
-            [PIPER_BIN, "--model", PIPER_VOICE, "--output_file", wav_path],
+            [PIPER_BIN, "--model", voz, "--output_file", wav_path],
             input=linea.encode("utf-8"),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
@@ -1025,6 +1059,7 @@ def main():
 
     while True:
         ident = cargar_identidad()
+        aplicar_voz(ident)  # cambio de voz en el panel → siguiente turno
         ota = cargar_ota()
         fuente = "OTA" if ota.get("system") else "local"
         print(
