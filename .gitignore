@@ -10,6 +10,9 @@ out/
 *.pem
 # device.json local con el device_token real (staging para scp a la Pi)
 firmware/device.json
+# Modelos de voz de Piper (binarios grandes, se descargan de HuggingFace)
+*.onnx
+*.onnx.json
 
 # Python
 __pycache__/
