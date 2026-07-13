@@ -6,6 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=botchi
+Environment=HOME=/home/botchi
 WorkingDirectory=/home/botchi/botchi
 ExecStart=/usr/bin/python3 /home/botchi/botchi/botchi_ota.py
 Restart=always
